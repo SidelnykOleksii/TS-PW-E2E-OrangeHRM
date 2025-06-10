@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { BasePimPage } from "./basePimPage";
+import { BasePimPage } from "./basePIMPage";
 
 export class PimAddEmployee extends BasePimPage {
   readonly employeeFirstNameField: Locator;
