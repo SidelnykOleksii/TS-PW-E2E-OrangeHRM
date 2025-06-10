@@ -1,22 +1,14 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../../app/pages/loginPage";
 import { PimAddEmployee } from "../../app/pages/PIMPage/addEmployeePage";
-import { LeftSideMenuComponent } from "../../app/ui/components/leftSideMenuComponents";
+import { BASE_URL } from "../../utils/config";
 
 test.describe("Add Employee Functionality", () => {
-  let loginPage: LoginPage;
   let pimAddEmployeePage: PimAddEmployee;
-  let leftSideMenuComponent: LeftSideMenuComponent;
 
   test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
     pimAddEmployeePage = new PimAddEmployee(page);
-    leftSideMenuComponent = new LeftSideMenuComponent(page);
 
-    await loginPage.goto("/auth/login");
-    await loginPage.login("admin", "admin123");
-
-    await leftSideMenuComponent.clickLeftSideMenuItem("PIM");
+    await page.goto(`${BASE_URL}/pim/viewEmployeeList`)
     await pimAddEmployeePage.clickTopbarMenuTab("Add Employee");
   });
 
