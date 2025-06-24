@@ -1,21 +1,14 @@
-import { test, expect } from "@playwright/test";
-import { PimAddEmployee } from "../../app/pages/PIMPage/addEmployeePage";
-import { BASE_URL } from "../../utils/config";
+import { expect } from "@playwright/test";
+import { test } from "../../app/fixtures/base.fixture";
 
 test.describe("Add Employee Functionality", () => {
-  let pimAddEmployeePage: PimAddEmployee;
-
-  test.beforeEach(async ({ page }) => {
-    pimAddEmployeePage = new PimAddEmployee(page);
-
-    await page.goto(`${BASE_URL}/pim/viewEmployeeList`)
-    await pimAddEmployeePage.clickTopbarMenuTab("Add Employee");
-  });
-
-  test("User can add a new employee", async ({ page }) => {
-    await pimAddEmployeePage.fillEmployeeForm("Samuel", "L", "Jackson");
-    await pimAddEmployeePage.saveEmployee();
+  test("User can add a new employee via UI", async ({ pages, page }) => {
+    await pages.addEmployeePage.goTo(`/pim/viewEmployeeList`);
+    await pages.addEmployeePage.clickTopbarMenuTab("Add Employee");
+    await pages.addEmployeePage.fillAddEmployeeForm("Samuel", "L", "Jackson");
+    await pages.addEmployeePage.saveEmployee();
 
     await expect(page).toHaveURL(/viewPersonalDetails\/empNumber\/\d+$/);
+    await expect(pages.employeeListPage.editEmployeeContent).toBeVisible();
   });
 });

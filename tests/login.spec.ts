@@ -7,7 +7,7 @@ test.describe("Login Functionality", () => {
 
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
-    await loginPage.goto("/auth/login");
+    await loginPage.goTo("/auth/login");
   });
 
   test("Should allow a user to login with valid credentials", async ({

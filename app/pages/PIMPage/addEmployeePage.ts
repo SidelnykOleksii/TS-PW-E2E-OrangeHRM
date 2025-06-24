@@ -20,7 +20,7 @@ export class PimAddEmployee extends BasePimPage {
     this.saveEmployeeButton = this.page.getByRole("button", { name: "Save" });
   }
 
-  async fillEmployeeForm(
+  async fillAddEmployeeForm(
     firstName: string,
     middleName: string,
     lastName: string,
@@ -29,6 +29,7 @@ export class PimAddEmployee extends BasePimPage {
     await this.employeeFirstNameField.fill(firstName);
     await this.employeeMiddleNameField.fill(middleName);
     await this.employeeLastNameField.fill(lastName);
+    await this.employeeIdField.clear();
     if (employeeId) {
       await this.employeeIdField.fill(employeeId);
     }

@@ -8,7 +8,7 @@ export abstract class BasePage {
     this.page = page;
   }
 
-  async goto(path: string) {
+  async goTo(path: string) {
     const normalizedPath = path.startsWith("/") ? path : `/${path}`;
     await this.page.goto(`${BASE_URL}${normalizedPath}`);
   }
