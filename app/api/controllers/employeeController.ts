@@ -4,13 +4,18 @@ export class EmployeeController extends BaseApiContext {
   apiEmployeeUrl =
     "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees";
 
-  async createEmployee(empPicture: string | null = null) {
+  async createEmployee(
+    empPicture: string | null = null,
+    firstName: string,
+    middleName: string,
+    lastName: string
+  ) {
     const sessionCookie = this.getSessionCookie();
     const headers = this.getHeaders(sessionCookie);
     const payload = {
-      firstName: "First",
-      middleName: "Middle",
-      lastName: "Last",
+      firstName,
+      middleName,
+      lastName,
       empPicture: empPicture,
       employeeId: "",
     };
