@@ -23,5 +23,22 @@ test.describe("Employee List Functionality", () => {
     await expect(pages.employeeListPage.editEmployeeLastNameField).toHaveValue(
       "Last Edited"
     );
+    await pages.employeeListPage.goTo("pim/viewEmployeeList");
+    await pages.employeeListPage.deleteEmployeeByName("Middle Edited");
+  });
+
+  test("The employee can be deleted", async ({ pages, page }) => {
+    await pages.employeeListPage.goTo(`pim/viewEmployeeList`);
+
+    await pages.addEmployeePage.clickTopbarMenuTab("Add Employee");
+    await pages.addEmployeePage.fillAddEmployeeForm("Employee", "To", "Delete");
+    await pages.addEmployeePage.saveEmployee();
+    await expect(page).toHaveURL(/viewPersonalDetails\/empNumber\/\d+$/);
+    await pages.employeeListPage.goTo(`pim/viewEmployeeList`);
+
+    await pages.employeeListPage.deleteEmployeeByName("Employee To Delete");
+    await expect(
+      pages.employeeListPage.table.rowByName("Employee To Delete")
+    ).toBeHidden();
   });
 });

@@ -1,16 +1,26 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePimPage } from "./basePIMPage";
+import { CommonTableComponent } from "../../ui/components/tableCommonComponent";
 
 export class PimEmployeeList extends BasePimPage {
+  // edit employee
   readonly editEmployeeContent: Locator;
   readonly editEmployeeFirstNameField: Locator;
   readonly editEmployeeMiddleNameField: Locator;
   readonly editEmployeeLastNameField: Locator;
   readonly saveEditedEmployeeButton: Locator;
 
+  // search employee
+  readonly searchEmployeeNameField: Locator;
+  readonly searchEmployeeButton: Locator;
+
+  readonly table: CommonTableComponent;
+
   constructor(page: Page) {
     super(page);
+    this.table = new CommonTableComponent(page);
 
+    // edit employee
     this.editEmployeeContent = this.page.locator(
       ".orangehrm-edit-employee-content"
     );
@@ -24,6 +34,14 @@ export class PimEmployeeList extends BasePimPage {
       .locator("form")
       .filter({ hasText: "Employee Full Name" })
       .getByRole("button");
+
+    // search employee
+    this.searchEmployeeNameField = this.page.locator(
+      'div.oxd-input-group:has(label:has-text("Employee Name")) input'
+    );
+    this.searchEmployeeButton = this.page.getByRole("button", {
+      name: "Search",
+    });
   }
 
   async editEmployeeFullName(
@@ -32,11 +50,27 @@ export class PimEmployeeList extends BasePimPage {
     lastName: string
   ) {
     // Temporary solution
-    await this.page.waitForTimeout(3000);
+    await this.page.waitForTimeout(2000);
 
     await this.editEmployeeFirstNameField.fill(firstName);
     await this.editEmployeeMiddleNameField.fill(middleName);
     await this.editEmployeeLastNameField.fill(lastName);
     await this.saveEditedEmployeeButton.click();
+  }
+
+  async deleteEmployeeByName(name: string) {
+    await this.searchEmployeeByName(name);
+
+    // Temporary solution
+    await this.page.waitForTimeout(2000);
+
+    await this.table.isRowByNameVisible(name);
+    await this.table.deleteButton(name).click();
+    await this.table.confirmDelete();
+  }
+
+  async searchEmployeeByName(name: string) {
+    await this.searchEmployeeNameField.fill(name);
+    await this.searchEmployeeButton.click();
   }
 }
