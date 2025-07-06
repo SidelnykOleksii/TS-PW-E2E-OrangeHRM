@@ -1,6 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePimPage } from "./basePIMPage";
 import { CommonTableComponent } from "../../ui/components/tableCommonComponent";
+import { getElementByLabelText } from "../locatorsHelper";
 
 export class PimEmployeeList extends BasePimPage {
   // edit employee
@@ -36,9 +37,7 @@ export class PimEmployeeList extends BasePimPage {
       .getByRole("button");
 
     // search employee
-    this.searchEmployeeNameField = this.page.locator(
-      'div.oxd-input-group:has(label:has-text("Employee Name")) input'
-    );
+    this.searchEmployeeNameField = getElementByLabelText(page, "Employee Name");
     this.searchEmployeeButton = this.page.getByRole("button", {
       name: "Search",
     });

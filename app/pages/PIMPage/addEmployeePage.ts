@@ -1,5 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePimPage } from "./basePIMPage";
+import { getElementByLabelText } from "../locatorsHelper";
 
 export class PimAddEmployee extends BasePimPage {
   readonly employeeFirstNameField: Locator;
@@ -14,9 +15,7 @@ export class PimAddEmployee extends BasePimPage {
     this.employeeFirstNameField = this.page.getByPlaceholder("First Name");
     this.employeeMiddleNameField = this.page.getByPlaceholder("Middle Name");
     this.employeeLastNameField = this.page.getByPlaceholder("Last Name");
-    this.employeeIdField = this.page.locator(
-      "//label[text()='Employee Id']/ancestor::div[contains(@class, 'input-field-bottom-space')]//input"
-    );
+    this.employeeIdField =  getElementByLabelText(page, "Employee Id");
     this.saveEmployeeButton = this.page.getByRole("button", { name: "Save" });
   }
 
