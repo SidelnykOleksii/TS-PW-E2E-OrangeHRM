@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { test } from "../../app/fixtures/base.fixture";
+import { test } from "../../app/fixtures/employeeApi.fixtures";
 
 test.describe("Add Employee Functionality", () => {
   const imageFormats = [
@@ -23,7 +23,7 @@ test.describe("Add Employee Functionality", () => {
 
   imageFormats.forEach(({ format, path }) => {
     test(`User can upload image with ${format} during employee creation`, async ({
-      pages, page
+      pages, page, deleteEmployeeByAPI,
     }) => {
       await pages.addEmployeePage.goTo(`/pim/viewEmployeeList`);
       await pages.addEmployeePage.clickTopbarMenuTab("Add Employee");
@@ -40,11 +40,9 @@ test.describe("Add Employee Functionality", () => {
       await expect(page).toHaveURL(/viewPersonalDetails\/empNumber\/\d+$/);
       await expect(pages.employeeListPage.editEmployeeContent).toBeVisible();
       await pages.addEmployeePage.uploadedImageIsVisibleAfterCreation();
-
-      await pages.employeeListPage.goTo(`pim/viewEmployeeList`);
-      await pages.employeeListPage.deleteEmployeeByName(
-        `Employee ${format} Image`
-      );
+      
+      const empNumber = await pages.addEmployeePage.extractEmpNumberFromUrl(page.url());
+      await deleteEmployeeByAPI(empNumber);
     });
   });
 });

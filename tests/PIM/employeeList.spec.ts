@@ -23,8 +23,6 @@ test.describe("Employee List Functionality", () => {
     await expect(pages.employeeListPage.editEmployeeLastNameField).toHaveValue(
       "Last Edited"
     );
-    await pages.employeeListPage.goTo("pim/viewEmployeeList");
-    await pages.employeeListPage.deleteEmployeeByName("Middle Edited");
   });
 
   test("The employee can be deleted", async ({ pages, page }) => {

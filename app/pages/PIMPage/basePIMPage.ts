@@ -1,4 +1,4 @@
-import { Locator, Page } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 import { BasePage } from "../basePage";
 
 export abstract class BasePimPage extends BasePage {
@@ -12,5 +12,11 @@ export abstract class BasePimPage extends BasePage {
 
   async clickTopbarMenuTab(name: string) {
     await this.topbarMenuTab(name).click();
+  }
+
+  async extractEmpNumberFromUrl(url: string) {
+    const match = url.match(/empNumber\/(\d+)/);
+    expect(match).not.toBeNull();
+    return match ? match[1] : "";
   }
 }
