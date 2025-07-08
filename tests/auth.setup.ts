@@ -9,7 +9,7 @@ setup("authenticate", async ({ page }) => {
   await page.getByPlaceholder('Password').fill('admin123');
   await page.getByRole('button', { name: 'Login' }).click();
   await page.getByRole('link', { name: 'Admin' }).click();
-  await page.getByRole('link', { name: 'Time' }).click();
+  await page.getByRole('link', { name: 'PIM' }).click();
 
   await page.context().storageState({ path: authFile });
 });
