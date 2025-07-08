@@ -10,6 +10,7 @@ export class PimAddEmployee extends BasePimPage {
   readonly employeeIdField: Locator;
   readonly employeeUploadImageElement: Locator;
   readonly employeeUploadImageFileInput: Locator;
+  readonly employeeUploadImageErrorMessage: Locator;
   readonly saveEmployeeButton: Locator;
 
   // edit employee
@@ -29,6 +30,7 @@ export class PimAddEmployee extends BasePimPage {
     this.employeeUploadImageFileInput = this.page.locator(
       '//input[@class="oxd-file-input"]'
     );
+    this.employeeUploadImageErrorMessage = this.page.getByText('File type not allowed');
     this.saveEmployeeButton = this.page.getByRole("button", { name: "Save" });
 
     // edit employee
