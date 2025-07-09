@@ -29,4 +29,9 @@ export abstract class BaseApiContext {
       Cookie: sessionCookie,
     };
   }
+
+  getAuthHeaders() {
+    const sessionCookie = this.getSessionCookie();
+    return this.getHeaders(sessionCookie);
+  }
 }
