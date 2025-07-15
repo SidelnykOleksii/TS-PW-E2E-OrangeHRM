@@ -23,6 +23,13 @@ export class EmployeeController extends BaseApiContext {
       data: payload,
       headers,
     });
+    if (response.status() !== 200) {
+      console.error(
+        "Error creating employee:",
+        response.status(),
+        response.statusText()
+      );
+    }
 
     return response;
   }
@@ -34,6 +41,14 @@ export class EmployeeController extends BaseApiContext {
       data: payload,
       headers,
     });
+
+    if (response.status() !== 200) {
+      console.error(
+        "Error deleting employee:",
+        response.status(),
+        response.statusText()
+      );
+    }
 
     return response;
   }
