@@ -1,5 +1,9 @@
 import { expect } from "@playwright/test";
 import { test } from "../../app/fixtures/employeeApi.fixtures";
+import {
+  expectedColumnTitles,
+  searchEmployeeByNameExpectedRows,
+} from "../../test-data/pim/employeeTableTestData";
 
 test.describe("Employee List Functionality", () => {
   test("The employee's full name can be edited", async ({
@@ -38,5 +42,30 @@ test.describe("Employee List Functionality", () => {
     await expect(
       pages.employeeListPage.table.rowByName("Employee To Delete")
     ).toBeHidden();
+  });
+
+  
+  test("User can search employee by Employee Name", async ({
+    pages,
+    page,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    createEmployeeByAPI,
+  }) => {
+    await pages.employeeListPage.goTo(`pim/viewEmployeeList`);
+    await pages.employeeListPage.searchEmployeeByName("First Middle");
+    await page.waitForTimeout(2000);
+    await pages.employeeListPage.table.isRowByNameVisible("First Middle");
+
+    const tableColumnTitles =
+      await pages.employeeListPage.table.getColumnTitleTexts();
+    console.log(tableColumnTitles);
+    expect(tableColumnTitles).toEqual(expectedColumnTitles);
+
+    const actualTableRows = await pages.employeeListPage.table.getTableRows();
+    console.log(actualTableRows);
+    await pages.employeeListPage.table.expectTableRowsMatch(
+      actualTableRows,
+      searchEmployeeByNameExpectedRows
+    );
   });
 });
