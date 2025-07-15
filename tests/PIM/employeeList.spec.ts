@@ -58,11 +58,9 @@ test.describe("Employee List Functionality", () => {
 
     const tableColumnTitles =
       await pages.employeeListPage.table.getColumnTitleTexts();
-    console.log(tableColumnTitles);
     expect(tableColumnTitles).toEqual(expectedColumnTitles);
 
     const actualTableRows = await pages.employeeListPage.table.getTableRows();
-    console.log(actualTableRows);
     await pages.employeeListPage.table.expectTableRowsMatch(
       actualTableRows,
       searchEmployeeByNameExpectedRows
