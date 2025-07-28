@@ -19,6 +19,10 @@ export class CommonTableComponent {
     this.tableCell = this.page.getByRole("cell");
   }
 
+  table(): Locator {
+    return this.page.locator(".orangehrm-container");
+  }
+
   deleteButton(name: string): Locator {
     const partialName = name;
     return this.page
