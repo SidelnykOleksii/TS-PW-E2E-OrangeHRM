@@ -6,6 +6,6 @@ export function getElementByLabelText(
   elementSelector = "input"
 ) {
   return page.locator(
-    `.oxd-input-group:has(label:has-text("${labelText}")) ${elementSelector}`
+    `.oxd-input-group:has(label:text-is("${labelText}")) ${elementSelector}`
   );
 }

@@ -1,6 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePimPage } from "./basePIMPage";
 import { CommonTableComponent } from "../../ui/components/tableCommonComponent";
+import { ButtonComponent } from "../../ui/components/buttonComponent";
 import { getElementByLabelText } from "../locatorsHelper";
 
 export class PimEmployeeList extends BasePimPage {
@@ -13,13 +14,14 @@ export class PimEmployeeList extends BasePimPage {
 
   // search employee
   readonly searchEmployeeNameField: Locator;
-  readonly searchEmployeeButton: Locator;
 
   readonly table: CommonTableComponent;
+  readonly button: ButtonComponent;
 
   constructor(page: Page) {
     super(page);
     this.table = new CommonTableComponent(page);
+    this.button = new ButtonComponent(page);
 
     // edit employee
     this.editEmployeeContent = this.page.locator(
@@ -38,9 +40,6 @@ export class PimEmployeeList extends BasePimPage {
 
     // search employee
     this.searchEmployeeNameField = getElementByLabelText(page, "Employee Name");
-    this.searchEmployeeButton = this.page.getByRole("button", {
-      name: "Search",
-    });
   }
 
   async editEmployeeFullName(
@@ -70,6 +69,6 @@ export class PimEmployeeList extends BasePimPage {
 
   async searchEmployeeByName(name: string) {
     await this.searchEmployeeNameField.fill(name);
-    await this.searchEmployeeButton.click();
+    await this.button.clickButtonByText("Search");
   }
 }
