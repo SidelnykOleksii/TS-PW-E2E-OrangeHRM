@@ -55,7 +55,7 @@ export class EmployeeController extends BaseApiContext {
   }
 }
 
-export async function createCustomEmployee(apiClient: ControllersManager, params: { firstName: string; middleName: string; lastName: string; employeeId?: string; }) {
+export async function createCustomEmployee(apiClient: ControllersManager, params: { firstName: string; middleName?: string; lastName: string; employeeId?: string; }) {
     const response = await apiClient.employeeController.createEmployee(
       params.employeeId ?? null,
       params.firstName,
