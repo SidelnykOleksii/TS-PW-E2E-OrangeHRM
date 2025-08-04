@@ -1,4 +1,5 @@
 import { BaseApiContext } from "../baseApiContext";
+import { ControllersManager } from "./controllersManager";
 
 export class EmployeeController extends BaseApiContext {
   apiEmployeeUrl =
@@ -53,3 +54,18 @@ export class EmployeeController extends BaseApiContext {
     return response;
   }
 }
+
+export async function createCustomEmployee(apiClient: ControllersManager, params: { firstName: string; middleName: string; lastName: string; employeeId?: string; }) {
+    const response = await apiClient.employeeController.createEmployee(
+      params.employeeId ?? null,
+      params.firstName,
+      params.middleName ?? "",
+      params.lastName
+    );
+    if(!response.ok()) {
+      throw new Error(`Failed to create employee: ${response.status()} ${response.statusText()}`);
+    }
+    const data = await response.json();
+    const empNumber = data.data.empNumber;
+    return {empNumber, response};
+  }

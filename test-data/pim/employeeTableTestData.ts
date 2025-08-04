@@ -10,5 +10,5 @@ export const expectedColumnTitles = [
 ];
 
 export const searchEmployeeByNameExpectedRows = [
-  ["", "First Middle", "Last", "", "", "", "", null],
+  ["", "SearchFirst SearchMiddle", "SearchLast", "", "", "", "", null],
 ];

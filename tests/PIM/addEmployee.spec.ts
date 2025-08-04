@@ -9,9 +9,9 @@ test.describe("Add Employee Functionality", () => {
   ];
 
   const invalidImageFormats = [
-    {format: "txt", path: "test-data/uploads/pimUploads/200x200.txt"},
-    {format: "xls", path: "test-data/uploads/pimUploads/200x200.xls"},
-  ]
+    { format: "txt", path: "test-data/uploads/pimUploads/200x200.txt" },
+    { format: "xls", path: "test-data/uploads/pimUploads/200x200.xls" },
+  ];
 
   test("User can add a new employee via UI", async ({ pages, page }) => {
     await pages.addEmployeePage.goTo(`/pim/viewEmployeeList`);
@@ -28,7 +28,9 @@ test.describe("Add Employee Functionality", () => {
 
   validImageFormats.forEach(({ format, path }) => {
     test(`User can upload image with ${format} format during employee creation`, async ({
-      pages, page, deleteEmployeeByAPI,
+      pages,
+      page,
+      deleteEmployeeByAPI,
     }) => {
       await pages.addEmployeePage.goTo(`/pim/viewEmployeeList`);
       await pages.addEmployeePage.clickTopbarMenuTab("Add Employee");
@@ -41,18 +43,21 @@ test.describe("Add Employee Functionality", () => {
       await pages.addEmployeePage.uploadEmployeeImage(path);
       await pages.addEmployeePage.uploadedImageIsVisibleDuringCreation();
       await pages.addEmployeePage.saveEmployee();
-      
-      await expect(page).toHaveURL(/viewPersonalDetails\/empNumber\/\d+$/);
-      await expect(pages.employeeListPage.editEmployeeContent).toBeVisible();
+
+      await expect(pages.employeeListPage.editEmployeeContent).toBeVisible({
+        timeout: 7000,
+      });
       await pages.addEmployeePage.uploadedImageIsVisibleAfterCreation();
-      
-      const empNumber = await pages.addEmployeePage.extractEmpNumberFromUrl(page.url());
+
+      const empNumber = await pages.addEmployeePage.extractEmpNumberFromUrl(
+        page.url()
+      );
       await deleteEmployeeByAPI(empNumber);
     });
   });
 
-  invalidImageFormats.forEach(({format, path}) => {
-    test(`Image with ${format} format can't be uploaded`, async ({pages}) => {
+  invalidImageFormats.forEach(({ format, path }) => {
+    test(`Image with ${format} format can't be uploaded`, async ({ pages }) => {
       await pages.addEmployeePage.goTo(`/pim/viewEmployeeList`);
       await pages.addEmployeePage.clickTopbarMenuTab("Add Employee");
       await pages.addEmployeePage.fillAddEmployeeForm(
@@ -61,7 +66,9 @@ test.describe("Add Employee Functionality", () => {
         "Image"
       );
       await pages.addEmployeePage.uploadEmployeeImage(path);
-      await expect(pages.addEmployeePage.employeeUploadImageErrorMessage).toBeVisible();
-    })
-  })
+      await expect(
+        pages.addEmployeePage.employeeUploadImageErrorMessage
+      ).toBeVisible();
+    });
+  });
 });

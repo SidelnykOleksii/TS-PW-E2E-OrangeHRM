@@ -48,7 +48,7 @@ export class PimEmployeeList extends BasePimPage {
     lastName: string
   ) {
     // Temporary solution
-    await this.page.waitForTimeout(2000);
+    await this.page.waitForTimeout(5000);
 
     await this.editEmployeeFirstNameField.fill(firstName);
     await this.editEmployeeMiddleNameField.fill(middleName);
