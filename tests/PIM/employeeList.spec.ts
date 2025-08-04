@@ -4,14 +4,20 @@ import {
   expectedColumnTitles,
   searchEmployeeByNameExpectedRows,
 } from "../../test-data/pim/employeeTableTestData";
+import { createCustomEmployee } from "../../app/api/controllers/employeeController";
 
 test.describe("Employee List Functionality", () => {
   test("The employee's full name can be edited", async ({
     pages,
-    createEmployeeByAPI,
+    apiClient,
   }) => {
+    const { empNumber } = await createCustomEmployee(apiClient, {
+      firstName: "Employee",
+      middleName: "To",
+      lastName: "Edit",
+    });
     await pages.employeeListPage.goTo(
-      `pim/viewPersonalDetails/empNumber/${createEmployeeByAPI.empNumber}`
+      `pim/viewPersonalDetails/empNumber/${empNumber}`
     );
     await pages.employeeListPage.editEmployeeFullName(
       "First Edited",
@@ -27,15 +33,15 @@ test.describe("Employee List Functionality", () => {
     await expect(pages.employeeListPage.editEmployeeLastNameField).toHaveValue(
       "Last Edited"
     );
+    await apiClient.employeeController.deleteEmployee(empNumber);
   });
 
-  test("The employee can be deleted", async ({ pages, page }) => {
-    await pages.employeeListPage.goTo(`pim/viewEmployeeList`);
-
-    await pages.addEmployeePage.clickTopbarMenuTab("Add Employee");
-    await pages.addEmployeePage.fillAddEmployeeForm("Employee", "To", "Delete");
-    await pages.addEmployeePage.saveEmployee();
-    await expect(page).toHaveURL(/viewPersonalDetails\/empNumber\/\d+$/);
+  test("The employee can be deleted", async ({ pages, apiClient }) => {
+    await createCustomEmployee(apiClient, {
+      firstName: "Employee",
+      middleName: "To",
+      lastName: "Delete",
+    });
     await pages.employeeListPage.goTo(`pim/viewEmployeeList`);
 
     await pages.employeeListPage.deleteEmployeeByName("Employee To Delete");
@@ -44,17 +50,24 @@ test.describe("Employee List Functionality", () => {
     ).toBeHidden();
   });
 
-  
   test("User can search employee by Employee Name", async ({
     pages,
     page,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    createEmployeeByAPI,
+    apiClient,
   }) => {
+    const { empNumber } = await createCustomEmployee(apiClient, {
+      firstName: "SearchFirst",
+      middleName: "SearchMiddle",
+      lastName: "SearchLast",
+    });
     await pages.employeeListPage.goTo(`pim/viewEmployeeList`);
-    await pages.employeeListPage.searchEmployeeByName("First Middle");
+    await pages.employeeListPage.searchEmployeeByName(
+      "SearchFirst SearchMiddle"
+    );
     await page.waitForTimeout(2000);
-    await pages.employeeListPage.table.isRowByNameVisible("First Middle");
+    await pages.employeeListPage.table.isRowByNameVisible(
+      "SearchFirst SearchMiddle"
+    );
 
     const tableColumnTitles =
       await pages.employeeListPage.table.getColumnTitleTexts();
@@ -65,5 +78,6 @@ test.describe("Employee List Functionality", () => {
       actualTableRows,
       searchEmployeeByNameExpectedRows
     );
+    await apiClient.employeeController.deleteEmployee(empNumber);
   });
 });
