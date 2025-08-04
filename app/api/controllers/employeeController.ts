@@ -62,7 +62,7 @@ export async function createCustomEmployee(apiClient: ControllersManager, params
       params.middleName ?? "",
       params.lastName
     );
-    if(!response.ok()) {
+    if (!response.ok()) {
       throw new Error(`Failed to create employee: ${response.status()} ${response.statusText()}`);
     }
     const data = await response.json();
