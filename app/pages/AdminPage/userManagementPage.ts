@@ -1,4 +1,3 @@
-import { Locator, Page } from "@playwright/test";
 import { BasePage } from "../basePage";
 import { DropdownComponent } from "../../ui/components/dropdownComponent";
 import { ButtonComponent } from "../../ui/components/buttonComponent";
@@ -7,34 +6,17 @@ import { getElementByLabelText } from "../locatorsHelper";
 import { AutocompleteComponent } from "../../ui/components/autocompleteComponent";
 
 export class AdminUserManagement extends BasePage {
-  readonly employeeNameAutocompleteField: Locator;
-  readonly employeeNameOption: Locator;
-  readonly usernameField: Locator;
-  readonly passwordField: Locator;
-  readonly confirmPasswordField: Locator;
+  private usernameField = getElementByLabelText(this.page, "Username");
+  private passwordField = getElementByLabelText(this.page, "Password");
+  private confirmPasswordField = getElementByLabelText(
+    this.page,
+    "Confirm Password"
+  );
 
-  readonly dropdown: DropdownComponent;
-  readonly button: ButtonComponent;
-  readonly table: CommonTableComponent;
-  readonly autocomplete: AutocompleteComponent;
-
-  constructor(page: Page) {
-    super(page);
-    this.dropdown = new DropdownComponent(page);
-    this.button = new ButtonComponent(page);
-    this.table = new CommonTableComponent(page);
-    this.autocomplete = new AutocompleteComponent(page);
-    // add system user
-    this.employeeNameAutocompleteField = getElementByLabelText(
-      page,
-      "Employee Name"
-    );
-    this.usernameField = getElementByLabelText(page, "Username");
-    this.passwordField = getElementByLabelText(page, "Password");
-    this.confirmPasswordField = getElementByLabelText(page, "Confirm Password");
-
-    // search system user
-  }
+  readonly dropdown = new DropdownComponent(this.page);
+  readonly button = new ButtonComponent(this.page);
+  readonly table = new CommonTableComponent(this.page);
+  readonly autocomplete = new AutocompleteComponent(this.page);
 
   async fillAddUserForm(
     userRoleOption: string,
@@ -56,7 +38,7 @@ export class AdminUserManagement extends BasePage {
     await this.confirmPasswordField.fill(confirmPassword);
   }
 
-  async searchSystemUser({
+  async fillSearchSystemUserForm({
     username,
     userRole,
     employeeName,

@@ -1,19 +1,17 @@
-import { test, expect } from "@playwright/test";
-import { LoginPage } from "../app/pages/loginPage";
+import { expect } from "@playwright/test";
 import { USERNAME, PASSWORD } from "../utils/credentials";
+import { test } from "../app/fixtures/base.fixture";
 
 test.describe("Login Functionality", () => {
-  let loginPage: LoginPage;
-
-  test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
-    await loginPage.goTo("/auth/login");
+  test.beforeEach(async ({ pages }) => {
+    await pages.loginPage.goTo("/auth/login");
   });
 
   test("Should allow a user to login with valid credentials", async ({
     page,
+    pages,
   }) => {
-    await loginPage.login(USERNAME, PASSWORD);
+    await pages.loginPage.fillLoginForm(USERNAME, PASSWORD);
     await expect(page).toHaveURL(/.*dashboard\/index/);
     await expect(
       page.locator("h6.oxd-text").filter({ hasText: "Dashboard" })
@@ -22,10 +20,10 @@ test.describe("Login Functionality", () => {
 
   test("Should display an error message with invalid credentials", async ({
     page,
+    pages,
   }) => {
-    await loginPage.login("invalidUser", "invalidPass");
-    await expect(loginPage.errorMessage).toBeVisible();
-    await expect(loginPage.errorMessage).toHaveText("Invalid credentials");
+    await pages.loginPage.fillLoginForm("invalidUser", "invalidPass");
+    await pages.loginPage.assertLoginErrorMessageIsVisible();
     await expect(page).toHaveURL(/.*auth\/login/);
   });
 });

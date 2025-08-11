@@ -16,24 +16,27 @@ test.describe("Employee List Functionality", () => {
       middleName: "To",
       lastName: "Edit",
     });
-    await pages.employeeListPage.goTo(
-      `pim/viewPersonalDetails/empNumber/${empNumber}`
-    );
-    await pages.employeeListPage.editEmployeeFullName(
-      "First Edited",
-      "Middle Edited",
-      "Last Edited"
-    );
-    await expect(pages.employeeListPage.editEmployeeFirstNameField).toHaveValue(
-      "First Edited"
-    );
-    await expect(
-      pages.employeeListPage.editEmployeeMiddleNameField
-    ).toHaveValue("Middle Edited");
-    await expect(pages.employeeListPage.editEmployeeLastNameField).toHaveValue(
-      "Last Edited"
-    );
-    await apiClient.employeeController.deleteEmployee(empNumber);
+    try {
+      await pages.employeeListPage.goTo(
+        `pim/viewPersonalDetails/empNumber/${empNumber}`
+      );
+      await pages.employeeListPage.editEmployeeFullName(
+        "First Edited",
+        "Middle Edited",
+        "Last Edited"
+      );
+      await expect(pages.employeeListPage.editEmployeeFirstNameField).toHaveValue(
+        "First Edited"
+      );
+      await expect(
+        pages.employeeListPage.editEmployeeMiddleNameField
+      ).toHaveValue("Middle Edited");
+      await expect(pages.employeeListPage.editEmployeeLastNameField).toHaveValue(
+        "Last Edited"
+      );
+    } finally {
+      await apiClient.employeeController.deleteEmployee(empNumber);
+    }
   });
 
   test("The employee can be deleted", async ({ pages, apiClient }) => {
@@ -60,24 +63,27 @@ test.describe("Employee List Functionality", () => {
       middleName: "SearchMiddle",
       lastName: "SearchLast",
     });
-    await pages.employeeListPage.goTo(`pim/viewEmployeeList`);
-    await pages.employeeListPage.searchEmployeeByName(
-      "SearchFirst SearchMiddle"
-    );
-    await page.waitForTimeout(2000);
-    await pages.employeeListPage.table.isRowByNameVisible(
-      "SearchFirst SearchMiddle"
-    );
+    try {
+      await pages.employeeListPage.goTo(`pim/viewEmployeeList`);
+      await pages.employeeListPage.searchEmployeeByName(
+        "SearchFirst SearchMiddle"
+      );
+      await page.waitForTimeout(2000);
+      await pages.employeeListPage.table.isRowByNameVisible(
+        "SearchFirst SearchMiddle"
+      );
 
-    const tableColumnTitles =
-      await pages.employeeListPage.table.getColumnTitleTexts();
-    expect(tableColumnTitles).toEqual(expectedColumnTitles);
+      const tableColumnTitles =
+        await pages.employeeListPage.table.getColumnTitleTexts();
+      expect(tableColumnTitles).toEqual(expectedColumnTitles);
 
-    const actualTableRows = await pages.employeeListPage.table.getTableRows();
-    await pages.employeeListPage.table.expectTableRowsMatch(
-      actualTableRows,
-      searchEmployeeByNameExpectedRows
-    );
-    await apiClient.employeeController.deleteEmployee(empNumber);
+      const actualTableRows = await pages.employeeListPage.table.getTableRows();
+      await pages.employeeListPage.table.expectTableRowsMatch(
+        actualTableRows,
+        searchEmployeeByNameExpectedRows
+      );
+    } finally {
+      await apiClient.employeeController.deleteEmployee(empNumber);
+    }
   });
 });
