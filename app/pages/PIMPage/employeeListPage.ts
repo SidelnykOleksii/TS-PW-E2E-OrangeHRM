@@ -1,4 +1,3 @@
-import { Locator, Page } from "@playwright/test";
 import { BasePimPage } from "./basePIMPage";
 import { CommonTableComponent } from "../../ui/components/tableCommonComponent";
 import { ButtonComponent } from "../../ui/components/buttonComponent";
@@ -6,41 +5,28 @@ import { getElementByLabelText } from "../locatorsHelper";
 
 export class PimEmployeeList extends BasePimPage {
   // edit employee
-  readonly editEmployeeContent: Locator;
-  readonly editEmployeeFirstNameField: Locator;
-  readonly editEmployeeMiddleNameField: Locator;
-  readonly editEmployeeLastNameField: Locator;
-  readonly saveEditedEmployeeButton: Locator;
+  readonly editEmployeeContent = this.page.locator(
+    ".orangehrm-edit-employee-content"
+  );
+  readonly editEmployeeFirstNameField =
+    this.editEmployeeContent.getByPlaceholder("First Name");
+  readonly editEmployeeMiddleNameField =
+    this.editEmployeeContent.getByPlaceholder("Middle Name");
+  readonly editEmployeeLastNameField =
+    this.editEmployeeContent.getByPlaceholder("Last Name");
+  private saveEditedEmployeeButton = this.page
+    .locator("form")
+    .filter({ hasText: "Employee Full Name" })
+    .getByRole("button");
 
   // search employee
-  readonly searchEmployeeNameField: Locator;
+  private searchEmployeeNameField = getElementByLabelText(
+    this.page,
+    "Employee Name"
+  );
 
-  readonly table: CommonTableComponent;
-  readonly button: ButtonComponent;
-
-  constructor(page: Page) {
-    super(page);
-    this.table = new CommonTableComponent(page);
-    this.button = new ButtonComponent(page);
-
-    // edit employee
-    this.editEmployeeContent = this.page.locator(
-      ".orangehrm-edit-employee-content"
-    );
-    this.editEmployeeFirstNameField =
-      this.editEmployeeContent.getByPlaceholder("First Name");
-    this.editEmployeeMiddleNameField =
-      this.editEmployeeContent.getByPlaceholder("Middle Name");
-    this.editEmployeeLastNameField =
-      this.editEmployeeContent.getByPlaceholder("Last Name");
-    this.saveEditedEmployeeButton = this.page
-      .locator("form")
-      .filter({ hasText: "Employee Full Name" })
-      .getByRole("button");
-
-    // search employee
-    this.searchEmployeeNameField = getElementByLabelText(page, "Employee Name");
-  }
+  readonly table = new CommonTableComponent(this.page);
+  readonly button = new ButtonComponent(this.page);
 
   async editEmployeeFullName(
     firstName: string,

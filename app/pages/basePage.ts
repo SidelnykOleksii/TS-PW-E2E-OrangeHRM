@@ -2,11 +2,7 @@ import { Page } from "@playwright/test";
 import { BASE_URL } from "../../utils/config";
 
 export abstract class BasePage {
-  protected page: Page;
-
-  constructor(page: Page) {
-    this.page = page;
-  }
+  constructor(protected page: Page) {}
 
   async goTo(path: string) {
     const normalizedPath = path.startsWith("/") ? path : `/${path}`;

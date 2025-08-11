@@ -1,43 +1,28 @@
-import { expect, Locator, Page } from "@playwright/test";
+import { expect } from "@playwright/test";
 import { BasePimPage } from "./basePIMPage";
 import { getElementByLabelText } from "../locatorsHelper";
 
 export class PimAddEmployee extends BasePimPage {
   // create employee
-  readonly employeeFirstNameField: Locator;
-  readonly employeeMiddleNameField: Locator;
-  readonly employeeLastNameField: Locator;
-  readonly employeeIdField: Locator;
-  readonly employeeUploadImageElement: Locator;
-  readonly employeeUploadImageFileInput: Locator;
-  readonly employeeUploadImageErrorMessage: Locator;
-  readonly saveEmployeeButton: Locator;
+  private employeeFirstNameField = this.page.getByPlaceholder("First Name");
+  private employeeMiddleNameField = this.page.getByPlaceholder("Middle Name");
+  private employeeLastNameField = this.page.getByPlaceholder("Last Name");
+  private employeeIdField = getElementByLabelText(this.page, "Employee Id");
+  private employeeUploadImageElement = this.page
+    .locator("form")
+    .getByRole("img", { name: "profile picture" });
+  private employeeUploadImageFileInput = this.page.locator(
+    '//input[@class="oxd-file-input"]'
+  );
+  readonly employeeUploadImageErrorMessage = this.page.getByText(
+    "File type not allowed"
+  );
+  private saveEmployeeButton = this.page.getByRole("button", { name: "Save" });
 
   // edit employee
-  readonly editEmployeeImage: Locator;
-
-  constructor(page: Page) {
-    super(page);
-
-    // create employee
-    this.employeeFirstNameField = this.page.getByPlaceholder("First Name");
-    this.employeeMiddleNameField = this.page.getByPlaceholder("Middle Name");
-    this.employeeLastNameField = this.page.getByPlaceholder("Last Name");
-    this.employeeIdField = getElementByLabelText(page, "Employee Id");
-    this.employeeUploadImageElement = this.page
-      .locator("form")
-      .getByRole("img", { name: "profile picture" });
-    this.employeeUploadImageFileInput = this.page.locator(
-      '//input[@class="oxd-file-input"]'
-    );
-    this.employeeUploadImageErrorMessage = this.page.getByText('File type not allowed');
-    this.saveEmployeeButton = this.page.getByRole("button", { name: "Save" });
-
-    // edit employee
-    this.editEmployeeImage = this.page
-      .locator(".orangehrm-edit-employee-image")
-      .getByRole("img", { name: "profile picture" });
-  }
+  private editEmployeeImage = this.page
+    .locator(".orangehrm-edit-employee-image")
+    .getByRole("img", { name: "profile picture" });
 
   async fillAddEmployeeForm(
     firstName: string,

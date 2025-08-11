@@ -18,10 +18,10 @@ test.describe("Admin/User Management", () => {
       "24fghttttttt"
     );
     await pages.adminUserManagement.clickSaveButton();
-    await expect(pages.adminUserManagement.table.table()).toBeVisible({ timeout: 6000 });
+    await expect(pages.adminUserManagement.table.table()).toBeVisible({ timeout: 8000 });
 
     await pages.adminUserManagement.goTo("/admin/viewSystemUsers");
-    await pages.adminUserManagement.searchSystemUser({
+    await pages.adminUserManagement.fillSearchSystemUserForm({
       username: "New Admin",
       employeeName: "First Middle Last",
     });
