@@ -1,5 +1,6 @@
 import { test } from "../../app/fixtures/employeeApi.fixtures";
 import { expect } from "@playwright/test";
+import { ADMIN_DEFAULT_PASS } from "../../utils/credentials";
 
 test.describe("Admin/User Management", () => {
   test("Create new system user", async ({
@@ -14,8 +15,8 @@ test.describe("Admin/User Management", () => {
       "First Middle Last",
       "Enabled",
       "New Admin",
-      "24fghttttttt",
-      "24fghttttttt"
+      ADMIN_DEFAULT_PASS,
+      ADMIN_DEFAULT_PASS
     );
     await pages.adminUserManagement.clickSaveButton();
     await expect(pages.adminUserManagement.table.table()).toBeVisible({ timeout: 8000 });

@@ -1,23 +1,13 @@
-import { Locator, Page, expect } from "@playwright/test";
+import { Locator, expect } from "@playwright/test";
+import { ComponentHolder } from "./abstractClasses";
 
-export class CommonTableComponent {
-  private page: Page;
-
-  readonly confirmDeleteButton: Locator;
-  readonly tableHeaderCell: Locator;
-  readonly tableRow: Locator;
-  readonly tableCell: Locator;
-
-  constructor(page: Page) {
-    this.page = page;
-
-    this.confirmDeleteButton = this.page.getByRole("button", {
-      name: " Yes, Delete",
-    });
-    this.tableHeaderCell = this.page.getByRole("columnheader");
-    this.tableRow = this.page.locator(".oxd-table-card").getByRole("row");
-    this.tableCell = this.page.getByRole("cell");
-  }
+export class CommonTableComponent extends ComponentHolder {
+  private confirmDeleteButton = this.page.getByRole("button", {
+    name: " Yes, Delete",
+  });
+  readonly tableHeaderCell = this.page.getByRole("columnheader");
+  readonly tableRow = this.page.locator(".oxd-table-card").getByRole("row");
+  readonly tableCell = this.page.getByRole("cell");
 
   table(): Locator {
     return this.page.locator(".orangehrm-container");

@@ -1,12 +1,7 @@
-import { expect, Locator, Page } from "@playwright/test";
+import { expect, Locator } from "@playwright/test";
+import { ComponentHolder } from "./abstractClasses";
 
-export class DropdownComponent {
-  private page: Page;
-
-  constructor(page: Page) {
-    this.page = page;
-  }
-
+export class DropdownComponent extends ComponentHolder {
   showDropdownOptions(dropdownTitle: string): Locator {
     return this.page.locator(
       `.oxd-input-group:has(label:text-is("${dropdownTitle}")) .oxd-select-text-input`

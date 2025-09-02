@@ -1,14 +1,8 @@
-import { Page, Locator } from "@playwright/test";
+import { Locator } from "@playwright/test";
+import { ComponentHolder } from "./abstractClasses";
 
-export class LeftSideMenuComponent {
-  private page: Page;
-
-  readonly leftSideMenuSearchField: Locator;
-
-  constructor(page: Page) {
-    this.page = page;
-    this.leftSideMenuSearchField = this.page.getByPlaceholder("Search");
-  }
+export class LeftSideMenuComponent extends ComponentHolder {
+  private leftSideMenuSearchField = this.page.getByPlaceholder("Search");
 
   leftSideMenuItem(name: string): Locator {
     return this.page.getByRole("link", { name });
