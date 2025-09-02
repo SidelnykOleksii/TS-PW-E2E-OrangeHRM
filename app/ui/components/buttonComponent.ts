@@ -1,14 +1,9 @@
-import { Locator, Page } from "@playwright/test";
+import { Locator } from "@playwright/test";
+import { ComponentHolder } from "./abstractClasses";
 
-export class ButtonComponent {
-  private page: Page;
-
+export class ButtonComponent extends ComponentHolder {
   readonly addButton: Locator;
   readonly searchButton: Locator;
-
-  constructor(page: Page) {
-    this.page = page;
-  }
 
   async clickButtonByText(buttonName: string) {
     return this.page.getByRole("button", { name: `${buttonName}` }).click();
