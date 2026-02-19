@@ -1,21 +1,15 @@
-// @ts-check
-import eslint from "@eslint/js";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
-import path from "path";
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
+import playwright from "eslint-plugin-playwright";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: eslint.configs.recommended,
-});
-
-export default [
-  ...compat.extends(
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:eslint-plugin-playwright/recommended"
-  ),
-];
+export default tseslint.config(
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  {
+    // ...playwright.configs['flat/recommended'],
+    files: ['tests/**'], 
+  },
+  {
+    ignores: ["node_modules/", "test-results/", "playwright-report/"],
+  }
+);
