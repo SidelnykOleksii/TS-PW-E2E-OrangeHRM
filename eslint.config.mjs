@@ -6,8 +6,8 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    // ...playwright.configs['flat/recommended'],
-    files: ['tests/**'], 
+    ...playwright.configs['flat/recommended'],
+    files: ['tests/**'],
   },
   {
     ignores: ["node_modules/", "test-results/", "playwright-report/"],
