@@ -1,3 +1,4 @@
+import { expect } from "@playwright/test";
 import { BasePage } from "../basePage";
 import { DropdownComponent } from "../../ui/components/dropdownComponent";
 import { ButtonComponent } from "../../ui/components/buttonComponent";
@@ -26,7 +27,7 @@ export class AdminUserManagement extends BasePage {
     password: string,
     confirmPassword: string
   ) {
-    await this.page.waitForTimeout(2000);
+    await expect(this.dropdown.showDropdownOptions("User Role")).toBeEnabled();
     await this.dropdown.selectDropdownOption("User Role", userRoleOption);
     await this.autocomplete.fillAutocompleteField(
       "Employee Name",

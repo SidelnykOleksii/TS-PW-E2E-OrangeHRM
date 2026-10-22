@@ -5,6 +5,7 @@ import {
   searchEmployeeByNameExpectedRows,
 } from "../../test-data/pim/employeeTableTestData";
 import { createCustomEmployee } from "../../app/api/controllers/employeeController";
+import { uniqueName } from "../../utils/unique";
 
 test.describe("Employee List Functionality", () => {
   test("The employee's full name can be edited", async ({
@@ -40,22 +41,23 @@ test.describe("Employee List Functionality", () => {
   });
 
   test("The employee can be deleted", async ({ pages, apiClient }) => {
+    const lastName = uniqueName("Delete");
     await createCustomEmployee(apiClient, {
       firstName: "Employee",
       middleName: "To",
-      lastName: "Delete",
+      lastName,
     });
     await pages.employeeListPage.goTo(`pim/viewEmployeeList`);
 
-    await pages.employeeListPage.deleteEmployeeByName("Employee To Delete");
+    const fullName = `Employee To ${lastName}`;
+    await pages.employeeListPage.deleteEmployeeByName(fullName);
     await expect(
-      pages.employeeListPage.table.rowByName("Employee To Delete")
+      pages.employeeListPage.table.rowByName(fullName)
     ).toBeHidden();
   });
 
   test("User can search employee by Employee Name", async ({
     pages,
-    page,
     apiClient,
   }) => {
     const { empNumber } = await createCustomEmployee(apiClient, {
@@ -68,7 +70,6 @@ test.describe("Employee List Functionality", () => {
       await pages.employeeListPage.searchEmployeeByName(
         "SearchFirst SearchMiddle"
       );
-      await page.waitForTimeout(2000);
       await pages.employeeListPage.table.isRowByNameVisible(
         "SearchFirst SearchMiddle"
       );

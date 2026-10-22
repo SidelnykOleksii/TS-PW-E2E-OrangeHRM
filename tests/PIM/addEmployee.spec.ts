@@ -1,5 +1,6 @@
 import { expect } from "@playwright/test";
 import { test } from "../../app/fixtures/employeeApi.fixtures";
+import { uniqueName } from "../../utils/unique";
 
 test.describe("Add Employee Functionality", () => {
   const validImageFormats = [
@@ -13,18 +14,30 @@ test.describe("Add Employee Functionality", () => {
     { format: "xls", path: "test-data/uploads/pimUploads/200x200.xls" },
   ];
 
-  test("User can add a new employee via UI", async ({ pages, page }) => {
+  test("User can add a new employee via UI", async ({
+    pages,
+    page,
+    apiClient,
+  }) => {
+    const lastName = uniqueName("Jackson");
+    let empNumber = "";
     try {
       await pages.addEmployeePage.goTo(`/pim/viewEmployeeList`);
       await pages.addEmployeePage.clickTopbarMenuTab("Add Employee");
-      await pages.addEmployeePage.fillAddEmployeeForm("Samuel", "L", "Jackson");
+      await pages.addEmployeePage.fillAddEmployeeForm("Samuel", "L", lastName);
       await pages.addEmployeePage.saveEmployee();
 
       await expect(page).toHaveURL(/viewPersonalDetails\/empNumber\/\d+$/);
       await expect(pages.employeeListPage.editEmployeeContent).toBeVisible();
+      empNumber = await pages.addEmployeePage.extractEmpNumberFromUrl(
+        page.url()
+      );
     } finally {
-      await pages.employeeListPage.goTo(`pim/viewEmployeeList`);
-      await pages.employeeListPage.deleteEmployeeByName("Samuel L Jackson");
+      // Only cleans up if creation actually succeeded; skip otherwise.
+      // eslint-disable-next-line playwright/no-conditional-in-test
+      if (empNumber) {
+        await apiClient.employeeController.deleteEmployee(empNumber);
+      }
     }
   });
 

@@ -27,7 +27,9 @@ export class LoginPage extends BasePage {
   }
 
   async assertLoginErrorMessageIsVisible() {
-    await expect(this.errorMessage).toBeVisible();
+    // The demo server can be slow to run validation and render the banner;
+    // give it more room than the default 5s before declaring it missing.
+    await expect(this.errorMessage).toBeVisible({ timeout: 10000 });
     await expect(this.errorMessage).toHaveText("Invalid credentials");
   }
 }

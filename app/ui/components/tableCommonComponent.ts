@@ -40,6 +40,9 @@ export class CommonTableComponent extends ComponentHolder {
   }
 
   async getTableRows() {
+    // Table re-renders after a search/navigation; count() doesn't retry like
+    // an assertion does, so without this it can race the render and read 0.
+    await expect(this.tableRow.first()).toBeVisible();
     const rowCount = await this.tableRow.count();
     const result: string[][] = [];
     for (let i = 0; i < rowCount; i++) {
