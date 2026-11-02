@@ -4,6 +4,7 @@ import { PimAddEmployee } from "./PIMPage/addEmployeePage";
 import { PimEmployeeList } from "./PIMPage/employeeListPage";
 import { AdminUserManagement } from "./AdminPage/userManagementPage";
 import { CorporateBranding } from "./AdminPage/corporateBrandingPage";
+import { AdminJobTitles } from "./AdminPage/jobTitlesPage";
 
 export class PageManager {
   loginPage: LoginPage;
@@ -11,6 +12,7 @@ export class PageManager {
   employeeListPage: PimEmployeeList;
   adminUserManagement: AdminUserManagement;
   corporateBranding: CorporateBranding;
+  adminJobTitles: AdminJobTitles;
 
   constructor(page: Page) {
     this.loginPage = new LoginPage(page);
@@ -18,5 +20,6 @@ export class PageManager {
     this.employeeListPage = new PimEmployeeList(page);
     this.adminUserManagement = new AdminUserManagement(page);
     this.corporateBranding = new CorporateBranding(page);
+    this.adminJobTitles = new AdminJobTitles(page);
   }
 }
