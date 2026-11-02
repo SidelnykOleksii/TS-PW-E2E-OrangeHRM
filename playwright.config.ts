@@ -49,8 +49,24 @@ export default defineConfig({
         storageState: "playwright/.auth/user.json",
       },
       dependencies: ['setup'],
-      testIgnore: "tests/login.spec.ts",
+      testIgnore: ["tests/login.spec.ts", "tests/Admin/**/*.spec.ts"],
       testMatch: "tests/**/*.spec.ts"
+    },
+    {
+      // Admin specs mutate account-wide state (system users, corporate
+      // branding) under the single shared demo account. Running them
+      // alongside each other (or the parallel PIM suite) races that shared
+      // state and causes flaky failures, so this project is capped to one
+      // worker to force them to run one at a time.
+      name: "admin-serial",
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: "playwright/.auth/user.json",
+      },
+      dependencies: ['setup'],
+      testMatch: "tests/Admin/**/*.spec.ts",
+      fullyParallel: false,
+      workers: 1,
     },
 
     // {

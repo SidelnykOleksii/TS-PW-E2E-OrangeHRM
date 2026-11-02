@@ -6,17 +6,17 @@ import { uniqueName } from "../../utils/unique";
 test.describe("Admin/User Management", () => {
   test("Create new system user", async ({
     pages,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     createEmployeeByAPI,
   }) => {
     const username = uniqueName("New Admin ");
+    const { fullName, displayName } = createEmployeeByAPI;
     try {
       await test.step("Create system user", async () => {
         await pages.adminUserManagement.goTo("/admin/viewSystemUsers");
         await pages.adminUserManagement.clickAddButton();
         await pages.adminUserManagement.fillAddUserForm(
           "Admin",
-          "First Middle Last",
+          fullName,
           "Enabled",
           username,
           ADMIN_DEFAULT_PASS,
@@ -30,7 +30,7 @@ test.describe("Admin/User Management", () => {
         await pages.adminUserManagement.goTo("/admin/viewSystemUsers");
         await pages.adminUserManagement.fillSearchSystemUserForm({
           username,
-          employeeName: "First Middle Last",
+          employeeName: fullName,
         });
         await expect(pages.adminUserManagement.table.rowByName(username)).toBeVisible();
 
@@ -38,7 +38,7 @@ test.describe("Admin/User Management", () => {
           await pages.adminUserManagement.table.getTableRows();
         await pages.adminUserManagement.table.expectTableRowsMatch(
           actualTableRows,
-          [[username, "Admin", "First Last", "Enabled", null]]
+          [[username, "Admin", displayName, "Enabled", null]]
         );
       });
     } finally {
