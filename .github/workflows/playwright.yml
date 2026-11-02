@@ -32,10 +32,36 @@ jobs:
         key: playwright-browsers-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
     - name: Install Playwright Browsers
       if: steps.playwright-cache.outputs.cache-hit != 'true'
-      run: npx playwright install --with-deps chromium
+      timeout-minutes: 20
+      run: |
+        n=0
+        until [ $n -ge 3 ]
+        do
+          timeout 5m npx playwright install --with-deps chromium && break
+          n=$((n+1))
+          echo "Attempt $n failed, retrying in 10s..."
+          sleep 10
+        done
+        if [ $n -ge 3 ]; then
+          echo "Playwright browser install failed after 3 attempts"
+          exit 1
+        fi
     - name: Install Playwright OS dependencies
       if: steps.playwright-cache.outputs.cache-hit == 'true'
-      run: npx playwright install-deps chromium
+      timeout-minutes: 10
+      run: |
+        n=0
+        until [ $n -ge 3 ]
+        do
+          timeout 3m npx playwright install-deps chromium && break
+          n=$((n+1))
+          echo "Attempt $n failed, retrying in 10s..."
+          sleep 10
+        done
+        if [ $n -ge 3 ]; then
+          echo "Playwright OS dependency install failed after 3 attempts"
+          exit 1
+        fi
     - name: Run Playwright tests
       run: npx playwright test
     - uses: actions/upload-artifact@v4
